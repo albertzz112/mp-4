@@ -1,7 +1,7 @@
 'use client'; // Client-side component
 
 import { useSearchParams } from 'next/navigation'; // For fetching query parameters
-import { useEffect, useState } from 'react'; // Hooks for state and side effects
+import { useEffect, useState, Suspense } from 'react'; // Hooks for state and side effects
 import { getArtworkByTitle } from '../lib/harvard'; // Data fetching function
 import Image from 'next/image';
 
@@ -12,7 +12,7 @@ interface Artwork {
     description?: string;
 }
 
-export default function ArtworkPage() {
+export function ArtworkPage() {
     const searchParams = useSearchParams(); // Get search params
     const title = searchParams.get('title'); // Extract 'title' from the URL query string
 
@@ -63,3 +63,12 @@ export default function ArtworkPage() {
         </main>
     );
 }
+
+// Wrap the ArtworkPage component in a Suspense boundary
+const SuspendedArtworkPage = () => (
+    <Suspense fallback={<div>Loading...</div>}>
+        <ArtworkPage />
+    </Suspense>
+);
+
+export default SuspendedArtworkPage;
