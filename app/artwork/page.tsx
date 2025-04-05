@@ -5,11 +5,18 @@ import { useEffect, useState } from 'react'; // Hooks for state and side effects
 import { getArtworkByTitle } from '../lib/harvard'; // Data fetching function
 import Image from 'next/image';
 
+// Define the structure of artwork data
+interface Artwork {
+    title: string;
+    imageUrl?: string;
+    description?: string;
+}
+
 export default function ArtworkPage() {
     const searchParams = useSearchParams(); // Get search params
     const title = searchParams.get('title'); // Extract 'title' from the URL query string
 
-    const [artwork, setArtwork] = useState<any>(null); // Store the fetched artwork
+    const [artwork, setArtwork] = useState<Artwork | null>(null); // Store the fetched artwork
     const [error, setError] = useState<string | null>(null); // For error handling
 
     useEffect(() => {
