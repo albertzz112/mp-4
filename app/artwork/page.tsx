@@ -12,7 +12,7 @@ interface Artwork {
     description?: string;
 }
 
-export function ArtworkPage() {
+export default function ArtworkPage() {
     const searchParams = useSearchParams(); // Get search params
     const title = searchParams.get('title'); // Extract 'title' from the URL query string
 
@@ -63,12 +63,3 @@ export function ArtworkPage() {
         </main>
     );
 }
-
-// Wrap the ArtworkPage component in a Suspense boundary
-const SuspendedArtworkPage = () => (
-    <Suspense fallback={<div>Loading...</div>}>
-        <ArtworkPage />
-    </Suspense>
-);
-
-export default SuspendedArtworkPage;
