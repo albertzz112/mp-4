@@ -1,7 +1,7 @@
 'use client'; // Client-side component
 
 import { useSearchParams } from 'next/navigation'; // For fetching query parameters
-import { useEffect, useState, Suspense } from 'react'; // Hooks for state and side effects
+import { useEffect, useState } from 'react'; // Hooks for state and side effects
 import { getArtworkByTitle } from '../lib/harvard'; // Data fetching function
 import Image from 'next/image';
 
