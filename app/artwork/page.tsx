@@ -1,22 +1,44 @@
-import { getArtworkByTitle } from '../lib/harvard';
+'use client'; // Client-side component
+
+import { useSearchParams } from 'next/navigation'; // For fetching query parameters
+import { useEffect, useState } from 'react'; // Hooks for state and side effects
+import { getArtworkByTitle } from '../lib/harvard'; // Data fetching function
 import Image from 'next/image';
 
-export default async function ArtworkPage({
-                                              searchParams,
-                                          }: {
-    searchParams: { title: string };
-}) {
-    const title = searchParams.title;
+export default function ArtworkPage() {
+    const searchParams = useSearchParams(); // Get search params
+    const title = searchParams.get('title'); // Extract 'title' from the URL query string
 
-    let artwork;
-    try {
-        artwork = await getArtworkByTitle(title);
-    } catch (e) {
-        return <div className="error">Error fetching artwork: {(e as Error).message}</div>;
+    const [artwork, setArtwork] = useState<any>(null); // Store the fetched artwork
+    const [error, setError] = useState<string | null>(null); // For error handling
+
+    useEffect(() => {
+        if (!title) return; // If no title, skip fetching
+
+        const fetchArtwork = async () => {
+            try {
+                const result = await getArtworkByTitle(title); // Fetch the artwork based on title
+                if (!result) {
+                    setError('This is not a valid artwork.'); // Handle case where artwork is not found
+                } else {
+                    setArtwork(result); // Set fetched artwork
+                }
+            } catch (e) {
+                setError('Error fetching artwork: ' + (e as Error).message); // Handle fetch error
+            }
+        };
+
+        fetchArtwork();
+    }, [title]); // Fetch artwork whenever 'title' changes
+
+    // If there's an error, display the error message
+    if (error) {
+        return <div className="error">{error}</div>;
     }
 
+    // If artwork is not yet loaded, show loading message
     if (!artwork) {
-        return <div className="error">This is not a valid artwork.</div>;
+        return <div className="error">Loading...</div>;
     }
 
     return (
