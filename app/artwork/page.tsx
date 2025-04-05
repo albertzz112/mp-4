@@ -6,7 +6,7 @@ export default async function ArtworkPage({
                                           }: {
     searchParams: { title: string };
 }) {
-    const { title } = searchParams;
+    const title = searchParams.title;
 
     let artwork;
     try {
